@@ -3,7 +3,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import { createSecureContext } from 'tls';
 
-export const port = process.env.PORT || 3000
+export const port = process.env.PORT || 3001
 
 export const app = express()
 
@@ -114,7 +114,7 @@ app.post('/terminals/:terminalId/transactions', (req, res) => {
         terminal: terminalId,
         result: result,
     })
-    
+
     return res.json(
         {
             result: result,
