@@ -17,7 +17,12 @@ const terminals = [
     {
         id: '9004',
         currency: 'zar',
-        symbol: 'R'
+        symbol: 'R',
+        currencyCode: "zar",
+        merchantCode: "5462",
+        merchantName: "The Coders Bakery",
+        merchantCity: "Cape Town",
+        countryCode: "ZA"
     },
     // {
     //     id: '2',
@@ -34,51 +39,76 @@ const terminals = [
 const cards = [
     {
         id: '1043878979806',
-        partner: '1'
+        partner: '1',
+        cardId: '700615',
+        // cardNumber: '4111111111111111',
+        url: 'http://localhost:3000'
     },
     {
         id: '906717833598',
-        partner: '2'
+        partner: '2',
+        cardId: '700615',
+        url: 'http://localhost:3000'
     },
     {
         id: '84492430001',
-        partner: '3'
+        partner: '3',
+        cardId: '700615',
+        url: 'http://localhost:3000'
     },
     {
         id: '1045274045110',
-        partner: '3'
+        partner: '3',
+        cardId: '700615',
+        url: 'http://localhost:3000'
     },
     {
         id: '82964458105',
-        partner: '3'
+        partner: '3',
+        cardId: '700615',
+        url: 'http://localhost:3000'
     },
     {
         id: '771551472176',
-        partner: '3'
+        partner: '3',
+        cardId: '700615',
+        url: 'http://localhost:3000'
     },
     {
         id: '701007080185',
-        partner: '3'
+        partner: '3',
+        cardId: '700615',
+        url: 'http://localhost:3000'
     },
     {
         id: '840716134595',
-        partner: '3'
+        partner: '3',
+        cardId: '700615',
+        url: 'http://localhost:3000'
     },
     {
         id: '496246335814',
-        partner: '3'
+        partner: '3',
+        cardId: '700615',
+        url: 'http://localhost:3000'
     },
     {
         id: '429434153712',
-        partner: '3'
+        partner: '3',
+        cardId: '700615',
+        url: 'http://localhost:3000'
     },
     {
         id: '150855690407',
-        partner: '3'
+        partner: '3',
+        cardId: '700615',
+        url: 'http://localhost:3000'
     },
     {
         id: '1045274045118',
-        partner: '3'
+        partner: '3',
+        cardId: '700615',
+        url: 'http://localhost:3000'
     },
 ]
 
@@ -107,6 +137,7 @@ app.post('/terminals/:terminalId/transactions', (req, res) => {
     if (card && card.partner === '1') {
         result = true
     }
+    callHost(card?.url? card.url : 'http://localhost:3000', card?.cardId? card.cardId : '700615', terminal, transaction.centsAmount)
     transactions.push({
         centsAmount: transaction.centsAmount,
         currency: transaction.currency,
@@ -154,3 +185,26 @@ app.post('/terminals/:terminalId/transactions', (req, res) => {
           }
       )
   });
+
+  async function callHost(host: string, cardId: string, terminal: any, amount: string) {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  "centsAmount": amount,
+  "currencyCode": terminal.currencyCode,
+  "merchantCode": terminal.merchantCode,
+  "merchantName": terminal.merchantName,
+  "merchantCity": terminal.merchantCity,
+  "countryCode": terminal.countryCode
+});
+
+ const response = await fetch(host + "/za/v1/cards/"+cardId+"/code/execute-live", {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow"
+ })
+ const result = await response.text();
+console.log(result)
+}
