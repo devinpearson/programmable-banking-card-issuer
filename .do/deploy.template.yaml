@@ -23,4 +23,8 @@ spec:
     instance_count: 1
     instance_size_slug: apps-s-1vcpu-0.5gb
     source_dir: /
+    envs:
+    - key: DATABASE_URL
+      scope: RUN_TIME
+      value: "file:./dev.db"
   region: ams
