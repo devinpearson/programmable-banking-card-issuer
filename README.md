@@ -8,6 +8,13 @@ This is a simple card issuer emulator that can be used to simulate a card issuer
 npm install
 ```
 
+## Docker
+    
+```bash
+docker build -t card-issuer .
+docker run -dp 127.0.0.1:3001:3001 card-issuer
+```
+
 ## Usage
 
 ```bash
