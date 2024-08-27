@@ -180,6 +180,7 @@ app.delete('/terminals/:terminalId', async (req: Request, res: Response) => {
 })
 
 app.post('/terminals/:terminalId/transactions', async (req, res) => {
+    let result = false
     const terminalId = req.params.terminalId
     const terminal = await prisma.terminal.findFirst({
         where: {
@@ -195,19 +196,22 @@ app.post('/terminals/:terminalId/transactions', async (req, res) => {
       })
     if (!card) {
         console.log('card not found')
+    } else {
+        let response = await callHost(card?.url? card.url : 'http://localhost:3000', card?.cardId? card.cardId : '700615', terminal, transaction.centsAmount)
+        transactions.push({
+            centsAmount: transaction.centsAmount,
+            currency: transaction.currency,
+            card: transaction.card,
+            terminal: terminalId,
+            result: response.data.result,
+        })
+
+        result = response.data.result
     }
-    let response = await callHost(card?.url? card.url : 'http://localhost:3000', card?.cardId? card.cardId : '700615', terminal, transaction.centsAmount)
-    transactions.push({
-        centsAmount: transaction.centsAmount,
-        currency: transaction.currency,
-        card: transaction.card,
-        terminal: terminalId,
-        result: response.data.result,
-    })
 
     return res.json(
         {
-            result: response.data.result,
+            result: result,
         }
       )
   });
