@@ -197,23 +197,27 @@ app.post('/terminals/:terminalId/transactions', async (req, res) => {
     if (!card) {
         console.log('card not found')
     } else {
-        let response = await callHost(card?.url? card.url : 'http://localhost:3000', card?.cardId? card.cardId : '700615', terminal, transaction.centsAmount)
-        transactions.push({
-            centsAmount: transaction.centsAmount,
-            currency: transaction.currency,
-            card: transaction.card,
-            terminal: terminalId,
-            result: response.data.result,
-        })
+        try {
+            let response = await callHost(card?.url? card.url : 'http://localhost:3000', card?.cardId? card.cardId : '700615', terminal, transaction.centsAmount)
+            transactions.push({
+                centsAmount: transaction.centsAmount,
+                currency: transaction.currency,
+                card: transaction.card,
+                terminal: terminalId,
+                result: response.data.result,
+            })
 
-        result = response.data.result
+            result = response.data.result
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return res.json(
         {
             result: result,
-        }
-      )
+        })
+
   });
 
   // This is a placeholder the actual implementation will be done in the future This is actually the transaction that should be sent on to the card code to be processed
