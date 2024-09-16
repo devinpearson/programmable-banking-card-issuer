@@ -15,6 +15,12 @@ app.use(express.urlencoded({ extended: false }))
 app.use(morgan('combined'));
 app.use(express.json())
 
+interface Card {
+    id: string;
+    cardId: string;
+    url: string;
+}
+
 const transactions = []
 // need to store terminals in a database
 // need to store cards in a database
@@ -32,8 +38,9 @@ app.get('/cards', async (req: Request, res: Response) => {
 
 app.post('/cards', async (req: Request, res: Response) => {
     try {
+        let incomingCard: Card = req.body
         const card = await prisma.card.create({
-            data: req.body,
+            data: incomingCard,
           })
         return res.json(card)
       } catch (error) {
@@ -42,12 +49,12 @@ app.post('/cards', async (req: Request, res: Response) => {
       }
 })
 
-app.get('/cards/:cardId', async (req: Request, res: Response) => {
+app.get('/cards/:id', async (req: Request, res: Response) => {
     try {
-        const cardId = req.params.cardId
+        const id = req.params.id
         const card = await prisma.card.findFirst({
             where: {
-            id: cardId,
+                id: id,
             },
         })
         if (!card) {
@@ -61,22 +68,22 @@ app.get('/cards/:cardId', async (req: Request, res: Response) => {
     }
 })
 
-app.patch('/cards/:cardId', async (req: Request, res: Response) => {
+app.patch('/cards/:id', async (req: Request, res: Response) => {
     try {
-        const cardId = req.params.cardId
+        const id = req.params.id
         const card = await prisma.card.findFirst({
             where: {
-            id: cardId,
+                id: id,
             },
         })
         if (!card) {
             console.log('no card found')
             return res.status(404).json('no card found') // no terminal was found
         }
-            const updatedCard = await prisma.card.update({
-                where: { id: cardId },
-                data: req.body,
-            })
+        const updatedCard = await prisma.card.update({
+            where: { id: id },
+            data: req.body,
+        })
         return res.json(updatedCard)
     } catch (error) {
         console.log(error)
@@ -84,12 +91,12 @@ app.patch('/cards/:cardId', async (req: Request, res: Response) => {
     }
 })
 
-app.delete('/cards/:cardId', async (req: Request, res: Response) => {
+app.delete('/cards/:id', async (req: Request, res: Response) => {
     try {
-        const cardId = req.params.cardId
+        const id = req.params.id
         const card = await prisma.card.findFirst({
             where: {
-            id: cardId,
+                id: id,
             },
         })
         if (!card) {
@@ -98,7 +105,7 @@ app.delete('/cards/:cardId', async (req: Request, res: Response) => {
         }
         await prisma.card.delete({
             where: {
-            id: cardId,
+                id: id,
             },
         })
         return res.json(card)
@@ -130,12 +137,12 @@ app.post('/terminals', async (req: Request, res: Response) => {
       }
 })
 
-app.get('/terminals/:terminalId', async (req: Request, res: Response) => {
+app.get('/terminals/:id', async (req: Request, res: Response) => {
     try {
-        const terminalId = req.params.terminalId
+        const id = req.params.id
         const terminal = await prisma.terminal.findFirst({
             where: {
-            id: terminalId,
+                id: id,
             },
         })
         if (!terminal) {
@@ -150,12 +157,12 @@ app.get('/terminals/:terminalId', async (req: Request, res: Response) => {
     }
 })
 
-app.patch('/terminals/:terminalId', async (req: Request, res: Response) => {
+app.patch('/terminals/:id', async (req: Request, res: Response) => {
     try {
-        const terminalId = req.params.terminalId
+        const id = req.params.id
         const terminal = await prisma.terminal.findFirst({
             where: {
-            id: terminalId,
+                id: id,
             },
         })
         if (!terminal) {
@@ -163,7 +170,7 @@ app.patch('/terminals/:terminalId', async (req: Request, res: Response) => {
             return res.status(404).json('no terminal found') // no terminal was found
         }
             const updatedTerminal = await prisma.terminal.update({
-                where: { id: terminalId },
+                where: { id: id },
                 data: req.body,
             })
         // let terminal = terminals.find(o => o.id === terminalId);
@@ -174,12 +181,12 @@ app.patch('/terminals/:terminalId', async (req: Request, res: Response) => {
     }
 })
 
-app.delete('/terminals/:terminalId', async (req: Request, res: Response) => {
+app.delete('/terminals/:id', async (req: Request, res: Response) => {
     try {
-        const terminalId = req.params.terminalId
+        const id = req.params.id
         const terminal = await prisma.terminal.findFirst({
             where: {
-            id: terminalId,
+                id: id,
             },
         })
         if (!terminal) {
@@ -188,7 +195,7 @@ app.delete('/terminals/:terminalId', async (req: Request, res: Response) => {
         }
         await prisma.terminal.delete({
             where: {
-            id: terminalId,
+                id: id,
             },
         })
         // let terminal = terminals.find(o => o.id === terminalId);
@@ -199,20 +206,20 @@ app.delete('/terminals/:terminalId', async (req: Request, res: Response) => {
     }
 })
 
-app.post('/terminals/:terminalId/transactions', async (req, res) => {
+app.post('/terminals/:id/transactions', async (req, res) => {
     try {
         let result = false
-        const terminalId = req.params.terminalId
+        const id = req.params.id
         const terminal = await prisma.terminal.findFirst({
             where: {
-            id: terminalId,
+            id: id,
             },
         })
 
         let transaction = req.body
         const card = await prisma.card.findFirst({
             where: {
-            id: transaction.card,
+                id: transaction.card,
             },
         })
         if (!card) {
@@ -224,7 +231,7 @@ app.post('/terminals/:terminalId/transactions', async (req, res) => {
                     centsAmount: transaction.centsAmount,
                     currency: transaction.currency,
                     card: transaction.card,
-                    terminal: terminalId,
+                    terminal: id,
                     result: response.data.result,
                 })
 

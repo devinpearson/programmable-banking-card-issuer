@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Card {
-  id        String   @id @unique
+  id        String @unique
   cardId    String
   url       String
 }
