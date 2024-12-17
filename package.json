@@ -1,13 +1,21 @@
 {
   "name": "card-issuer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "dev": "tsx --watch ./src/index.ts --tsconfig ./tsconfig.json"
+    "start": "node dist/src/index.js",
+    "dev": "npm run dev:tsc & npm run dev:node",
+    "dev:tsc": "tsc --watch --preserveWatchOutput",
+    "dev:node": "node --enable-source-maps --watch dist/src/index.js",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
+    "clean": "rimraf dist/",
+    "build": "npm run clean && tsc",
+    "test": "vitest"
   },
   "dependencies": {
+    "@prisma/client": "^5.18.0",
     "@types/express": "^4.17.21",
     "@types/node": "^20.12.7",
     "body-parser": "^1.20.0",
@@ -23,6 +31,11 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/morgan": "^1.9.9",
-    "tsx": "^4.7.2"
+    "@types/supertest": "^6.0.2",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
+    "prisma": "^5.18.0",
+    "supertest": "^7.0.0",
+    "vitest": "^2.1.5"
   }
 }
