@@ -1,6 +1,6 @@
 {
   "name": "card-issuer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "src/index.js",
   "type": "module",
@@ -9,7 +9,6 @@
     "dev": "npm run dev:tsc & npm run dev:node",
     "dev:tsc": "tsc --watch --preserveWatchOutput",
     "dev:node": "node --enable-source-maps --watch dist/src/index.js",
-    "tailwind": "npx tailwindcss -i ./src/input.css -o ./public/output.css",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "clean": "rimraf dist/",
     "build": "npm run clean && tsc",
