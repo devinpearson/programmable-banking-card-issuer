@@ -1,26 +1,10 @@
-# Programmble banking Card Issuer Emulator
-
-This is a simple card issuer emulator that can be used to simulate a card issuer system. The system is able to create a card, block a card, and unblock a card. The system is implemented in Typescript and uses a simple in-memory database to store the card information.
-
-## Installation
-
-```bash
-npm install
-```
-
-## Docker
-    
-```bash
-docker build -t card-issuer .
-docker run -dp 127.0.0.1:3001:3001 card-issuer
-```
-
 # Programmable Banking Card Issuer Emulator
 
 This is a simple card issuer emulator that simulates a card issuer system. The system can create, block, and unblock cards. It is implemented in TypeScript and uses a simple in-memory database to store card information.
 
 ## Table of Contents
 - [Installation](#installation)
+- [DevContainer (VSCode)](#devcontainer-vscode)
 - [Docker](#docker)
 - [Usage](#usage)
 - [Endpoints](#endpoints)
@@ -29,20 +13,27 @@ This is a simple card issuer emulator that simulates a card issuer system. The s
 - [License](#license)
 - [Contact](#contact)
 - [Acknowledgments](#acknowledgments)
+- [Deploy to DigitalOcean](#deploy-to-digitalocean)
+- [Other Projects](#other-projects)
 
 ## Installation
+Before installing, [download and install Node.js](https://nodejs.org/en/download/).
 
-### Prerequisites
-- Node.js (version X.X.X)
-- npm (version X.X.X)
-
-### Steps
+```bash
+git clone https://github.com/devinpearson/programmable-banking-card-issuer.git
+cd programmable-banking-card-issuer
+```
 ```bash
 npm install
 ```
+## DevContainer (VSCode)
+VS Code will automatically detect the `.devcontainer` folder and prompt you to open the project in a container. This will set up the environment for you to run the server in a Docker container. 
+```bash
+docker-compose -f .devcontainer/docker-compose.yml up
+```
 
 ## Docker
-
+    
 ```bash
 docker build -t card-issuer .
 docker run -dp 127.0.0.1:3001:3001 card-issuer
@@ -99,27 +90,21 @@ This project is licensed under the MIT License.
 
 ## Contact
 
-For inquiries, please contact [Your Name] at [your.email@example.com].
+For inquiries, please open an issue.
 
 ## Acknowledgments
 
 - [Prisma](https://www.prisma.io/)
 - [Express](https://expressjs.com/)
 
-```bash
-npm run dev
-```
-### Endpoints
-- GET /terminals/:terminalId
-Returns the terminal information
-
-- POST /terminals/:terminalId/transactions
-Creates a transaction for the terminal
-```json
-{
-    "centsAmount": "5600",
-    "card": "1043878979806",
-    "currency": "zar"
-}
-```
+## Deploy to DigitalOcean
 [![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/devinpearson/programmable-banking-card-issuer/tree/develop)
+
+## Other Projects
+- [Banking API Simulator](https://github.com/devinpearson/programmable-banking-sim)
+- [Random banking data generator](https://github.com/devinpearson/programmable-banking-faker)
+- [Open Banking Point of Sales device](https://github.com/devinpearson/programmable-banking-pos)
+- [CLI app for running programmable banking card code](https://github.com/devinpearson/card-code-cli)
+- [A blockly editor for card code](https://github.com/devinpearson/investec-blockly)
+- [A HTTP server for using the card code emulator](https://github.com/devinpearson/investec-card-server)
+- [The card code emulator package](https://github.com/devinpearson/programmable-card-code-emulator)
